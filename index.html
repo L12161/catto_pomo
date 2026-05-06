@@ -270,6 +270,65 @@ body {
 .tomato { font-size: 10px; line-height: 1; }
 .tomato.dim { opacity: 0.2; filter: grayscale(1); }
 
+/* ── SETTINGS PANEL ── */
+.settings-row {
+  width: 100%;
+  display: none;
+  background: var(--card);
+  border: 3px solid var(--gold);
+  padding: 14px 14px 12px;
+  flex-direction: column;
+  gap: 10px;
+}
+.settings-row.open { display: flex; }
+.settings-title {
+  font-size: 6px;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+.settings-fields {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.setting-field label {
+  font-size: 5px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.setting-field input {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  color: var(--gold);
+  padding: 7px 6px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  width: 100%;
+  outline: none;
+  text-align: center;
+}
+.setting-field input:focus { border-color: var(--gold); }
+.btn-save {
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  border-bottom: 3px solid #a87828;
+  padding: 9px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  align-self: flex-end;
+  outline: none;
+}
+.btn-save:active { transform: translateY(1px); border-bottom-width: 1px; }
+
 /* ── FLASH OVERLAY ── */
 .flash {
   position: fixed;
@@ -293,10 +352,32 @@ body {
     <div class="sub">stay cozy · stay focused</div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" data-mode="focus"  data-mins="25">FOCUS</button>
-    <button class="tab"        data-mode="short"  data-mins="5">SHORT</button>
-    <button class="tab"        data-mode="long"   data-mins="15">LONG</button>
+  <div style="display:flex;width:100%;gap:0;align-items:stretch;">
+    <div class="tabs" style="flex:1;">
+      <button class="tab active" data-mode="focus"  data-mins="25">FOCUS</button>
+      <button class="tab"        data-mode="short"  data-mins="5">SHORT</button>
+      <button class="tab"        data-mode="long"   data-mins="15">LONG</button>
+    </div>
+    <button class="btn-icon" id="settingsBtn" title="set durations" style="border-left:none;font-size:12px;">⚙</button>
+  </div>
+
+  <div class="settings-row" id="settingsPanel">
+    <div class="settings-title">SET DURATIONS</div>
+    <div class="settings-fields">
+      <div class="setting-field">
+        <label>FOCUS</label>
+        <input id="setFocus" type="number" min="1" max="90" value="25">
+      </div>
+      <div class="setting-field">
+        <label>SHORT</label>
+        <input id="setShort" type="number" min="1" max="30" value="5">
+      </div>
+      <div class="setting-field">
+        <label>LONG</label>
+        <input id="setLong"  type="number" min="1" max="60" value="15">
+      </div>
+      <button class="btn-save" id="saveBtn">SAVE</button>
+    </div>
   </div>
 
   <div class="timer-card">
@@ -790,6 +871,24 @@ document.querySelectorAll('.tab').forEach(tab => {
     mode = tab.dataset.mode;
     resetTimer();
   });
+});
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  document.getElementById('settingsPanel').classList.toggle('open');
+});
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const f = parseInt(document.getElementById('setFocus').value) || 25;
+  const s = parseInt(document.getElementById('setShort').value) || 5;
+  const l = parseInt(document.getElementById('setLong').value)  || 15;
+  DURATIONS.focus = Math.min(90, Math.max(1, f)) * 60;
+  DURATIONS.short = Math.min(30, Math.max(1, s)) * 60;
+  DURATIONS.long  = Math.min(60, Math.max(1, l)) * 60;
+  document.getElementById('setFocus').value = DURATIONS.focus / 60;
+  document.getElementById('setShort').value = DURATIONS.short / 60;
+  document.getElementById('setLong').value  = DURATIONS.long  / 60;
+  resetTimer();
+  document.getElementById('settingsPanel').classList.remove('open');
 });
 
 document.getElementById('startBtn').addEventListener('click', startStop);
