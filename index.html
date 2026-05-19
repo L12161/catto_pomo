@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🍅 Pomodoro · Infinite Harvest</title>
+<title>🍅 Pomodoro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
@@ -127,7 +126,7 @@ body {
   margin-top: -6px;
 }
 
-/* ── TRACK CANVAS (journey strip) ── */
+/* ── TRACK CANVAS ── */
 #trackCanvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
@@ -227,7 +226,7 @@ body {
   min-height: 20px;
 }
 
-/* ── LOG PANEL with UNLIMITED TRACKING (paged) ── */
+/* ── LOG PANEL ── */
 .log-panel {
   background: var(--card);
   border: 3px solid var(--border);
@@ -238,39 +237,13 @@ body {
   gap: 8px;
   min-width: 0;
 }
-.log-title { 
-  font-size: 6px; 
-  color: var(--gold); 
-  letter-spacing: 1px;
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.log-title span:first-child { letter-spacing: 1px; }
-.log-nav {
-  display: flex;
-  gap: 5px;
-  font-size: 6px;
-}
-.log-nav button {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--gold);
-  font-family: monospace;
-  font-size: 4px;
-  padding: 2px 5px;
-  cursor: pointer;
-}
-.log-nav button:hover { background: var(--gold); color: var(--bg); }
+.log-title { font-size: 6px; color: var(--gold); letter-spacing: 1px; }
 
 .log-entries {
   display: flex;
   flex-direction: column;
   gap: 5px;
   flex: 1;
-  max-height: 110px;
-  overflow-y: auto;
-  padding-right: 3px;
 }
 .log-entry {
   font-size: 5px;
@@ -286,22 +259,17 @@ body {
 .log-entry .tk { color: #c49a50; }
 .log-empty { font-size: 5px; color: var(--dark); }
 
-/* TOMATO COUNTER: unlimited harvest – no longer capped! */
 .tomato-row {
   display: flex;
   flex-wrap: wrap;
   gap: 3px;
   padding-top: 4px;
   border-top: 1px solid var(--border);
-  justify-content: flex-start;
-  max-height: 34px;
-  overflow-y: auto;
-  align-items: center;
 }
-.tomato { font-size: 10px; line-height: 1; cursor: default; display: inline-block; }
-.tomato-dim { opacity: 0.3; filter: grayscale(0.6); }
+.tomato { font-size: 10px; line-height: 1; }
+.tomato.dim { opacity: 0.2; filter: grayscale(1); }
 
-/* settings & flash unchanged */
+/* ── SETTINGS PANEL ── */
 .settings-row {
   width: 100%;
   display: none;
@@ -312,10 +280,27 @@ body {
   gap: 10px;
 }
 .settings-row.open { display: flex; }
-.settings-title { font-size: 6px; color: var(--gold); letter-spacing: 2px; }
-.settings-fields { display: flex; gap: 8px; align-items: flex-end; }
-.setting-field { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-.setting-field label { font-size: 5px; color: var(--muted); letter-spacing: 1px; }
+.settings-title {
+  font-size: 6px;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+.settings-fields {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.setting-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+.setting-field label {
+  font-size: 5px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
 .setting-field input {
   background: var(--bg2);
   border: 2px solid var(--border);
@@ -339,9 +324,11 @@ body {
   cursor: pointer;
   white-space: nowrap;
   align-self: flex-end;
+  outline: none;
 }
 .btn-save:active { transform: translateY(1px); border-bottom-width: 1px; }
 
+/* ── FLASH OVERLAY ── */
 .flash {
   position: fixed;
   inset: 0;
@@ -361,7 +348,7 @@ body {
 <div class="app">
   <div class="header">
     <h1>🍅 POMODORO</h1>
-    <div class="sub">∞ harvest · every tomato counts</div>
+    <div class="sub">stay cozy · stay focused</div>
   </div>
 
   <div style="display:flex;width:100%;gap:0;align-items:stretch;">
@@ -376,9 +363,18 @@ body {
   <div class="settings-row" id="settingsPanel">
     <div class="settings-title">SET DURATIONS</div>
     <div class="settings-fields">
-      <div class="setting-field"><label>FOCUS</label><input id="setFocus" type="number" min="1" max="90" value="25"></div>
-      <div class="setting-field"><label>SHORT</label><input id="setShort" type="number" min="1" max="30" value="5"></div>
-      <div class="setting-field"><label>LONG</label><input id="setLong"  type="number" min="1" max="60" value="15"></div>
+      <div class="setting-field">
+        <label>FOCUS</label>
+        <input id="setFocus" type="number" min="1" max="90" value="25">
+      </div>
+      <div class="setting-field">
+        <label>SHORT</label>
+        <input id="setShort" type="number" min="1" max="30" value="5">
+      </div>
+      <div class="setting-field">
+        <label>LONG</label>
+        <input id="setLong"  type="number" min="1" max="60" value="15">
+      </div>
       <button class="btn-save" id="saveBtn">SAVE</button>
     </div>
   </div>
@@ -405,26 +401,18 @@ body {
       <div class="cat-mood" id="catMood">click to pet!</div>
     </div>
     <div class="log-panel">
-      <div class="log-title">
-        <span>🍅 SESSIONS · UNLIMITED</span>
-        <div class="log-nav">
-          <button id="prevLogBtn" title="older">◀</button>
-          <button id="nextLogBtn" title="newer">▶</button>
-        </div>
-      </div>
+      <div class="log-title">TODAY'S LOG</div>
       <div class="log-entries" id="logEntries">
         <div class="log-empty">no sessions yet ☕</div>
       </div>
-      <div class="tomato-row" id="tomatoRow">
-        <!-- unlimited tomatoes will be drawn dynamically -->
-      </div>
+      <div class="tomato-row" id="tomatoRow"></div>
     </div>
   </div>
 </div>
 
 <script>
 // ════════════════════════════════════════
-//  STATE — NO LIMIT ON SESSIONS ANYMORE
+//  STATE
 // ════════════════════════════════════════
 const DURATIONS = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
 let mode       = 'focus';
@@ -433,183 +421,381 @@ let totalTime  = DURATIONS.focus;
 let running    = false;
 let ticker     = null;
 let sessionNum = 1;
-let sessions   = [];          // { ts, task, mode?, timestamp } – unlimited!
-
-// log pagination: show latest 5 entries per page
-let logPage      = 0;          // 0 = most recent page (newest first)
-const LOG_PAGE_SIZE = 5;
+let sessions   = [];          // { ts, task }
 
 // ════════════════════════════════════════
-//  TRACK CANVAS (same charming walker)
+//  TRACK CANVAS  (160 × 26 logical px → CSS 3× ≈ 480 CSS px)
 // ════════════════════════════════════════
 const track     = document.getElementById('trackCanvas');
 const tctx      = track.getContext('2d');
 tctx.imageSmoothingEnabled = false;
 
+// Geometry
 const TW = 160, TH = 26;
-const GROUND_Y   = 20;
-const CAT_W      = 11;
-const CAT_H      = 14;
-const CAT_TOP_Y  = GROUND_Y - CAT_H;
+const GROUND_Y   = 20;          // top row of ground
+const CAT_W      = 11;          // sprite width in logical px
+const CAT_H      = 14;          // sprite height
+const CAT_TOP_Y  = GROUND_Y - CAT_H; // y where cat sprite starts (6)
 const WALK_X_MIN = 2;
-const WALK_X_MAX = TW - 4 - CAT_W;
+const WALK_X_MAX = TW - 4 - CAT_W;  // 145
+
+// Cat walk animation
 let walkFrame     = 0;
 let walkFrameTime = 0;
-const WALK_PERIOD = 220;
+const WALK_PERIOD = 220;         // ms between frames when running
 
+// ── palette shortcuts
 const C = {
-  body:  '#c9956e', dark:  '#7a4f2e', light: '#f0c090', eye:   '#1a0e06',
-  pink:  '#f0a0a0', gold:  '#f5c97a', gold2: '#e0b060', gnd1:  '#55341a',
-  gnd2:  '#442810', gnd3:  '#3a2010', grass: '#7a9a30', grass2:'#5a7a22', flag:  '#c9956e',
+  body:  '#c9956e',
+  dark:  '#7a4f2e',
+  light: '#f0c090',
+  eye:   '#1a0e06',
+  pink:  '#f0a0a0',
+  gold:  '#f5c97a',
+  gold2: '#e0b060',
+  gnd1:  '#55341a',
+  gnd2:  '#442810',
+  gnd3:  '#3a2010',
+  grass: '#7a9a30',
+  grass2:'#5a7a22',
+  flag:  '#c9956e',
 };
 
-function px(ctx, x, y, c) { if(c) ctx.fillStyle = c; ctx.fillRect(x, y, 1, 1); }
+function px(ctx, x, y, c) {
+  ctx.fillStyle = c;
+  ctx.fillRect(x, y, 1, 1);
+}
 
+// ── Draw the walk cat sprite at (x, y), two walk frames
 function drawWalkSprite(x, y, frame, happy) {
   const p = (dx, dy, c) => px(tctx, x + dx, y + dy, c);
-  p(1,0,C.dark); p(2,1,C.body);
-  p(7,0,C.dark); p(6,1,C.body);
-  for (let r = 1; r <= 5; r++) for (let c2 = 1; c2 <= 8; c2++) p(c2, r, C.body);
-  if (happy) { p(2,3,C.dark); p(3,2,C.dark); p(6,3,C.dark); p(7,2,C.dark); }
-  else { p(2,3,C.eye); p(3,3,C.eye); p(6,3,C.eye); p(7,3,C.eye); p(3,2,C.light); p(7,2,C.light); }
-  p(4,4,C.pink); p(5,4,C.pink);
-  for (let r = 6; r <= 10; r++) for (let c2 = 1; c2 <= 9; c2++) p(c2, r, C.body);
-  for (let r = 7; r <= 10; r++) for (let c2 = 3; c2 <= 7; c2++) p(c2, r, C.light);
-  p(10,9,C.body); p(10,8,C.body); p(10,7,C.dark); p(10,6,C.dark);
-  if (frame === 0) {
-    p(2,11,C.body); p(2,12,C.dark); p(4,11,C.dark); p(4,12,C.body);
-    p(6,11,C.body); p(6,12,C.dark); p(8,11,C.dark); p(8,12,C.body);
+
+  // ears
+  p(1, 0, C.dark); p(2, 1, C.body);
+  p(7, 0, C.dark); p(6, 1, C.body);
+
+  // head  (cols 1–8, rows 1–5)
+  for (let r = 1; r <= 5; r++)
+    for (let c2 = 1; c2 <= 8; c2++) p(c2, r, C.body);
+  // trim corners
+  p(1,1,''); p(8,1,''); p(1,5,''); p(8,5,'');
+
+  // eyes
+  if (happy) {
+    p(2,3,C.dark); p(3,2,C.dark);   // left curved happy
+    p(6,3,C.dark); p(7,2,C.dark);   // right
   } else {
-    p(2,11,C.dark); p(2,12,C.body); p(4,11,C.body); p(4,12,C.dark);
-    p(6,11,C.dark); p(6,12,C.body); p(8,11,C.body); p(8,12,C.dark);
+    p(2,3,C.eye);  p(3,3,C.eye);
+    p(6,3,C.eye);  p(7,3,C.eye);
+    p(3,2,C.light); p(7,2,C.light); // shines
+  }
+
+  // nose
+  p(4,4,C.pink); p(5,4,C.pink);
+
+  // body (cols 1–9, rows 6–10)
+  for (let r = 6; r <= 10; r++)
+    for (let c2 = 1; c2 <= 9; c2++) p(c2, r, C.body);
+  p(1,6,''); p(9,6,''); p(1,10,''); p(9,10,'');
+
+  // belly
+  for (let r = 7; r <= 10; r++)
+    for (let c2 = 3; c2 <= 7; c2++) p(c2, r, C.light);
+
+  // tail (curls up-right)
+  p(10, 9, C.body); p(10, 8, C.body); p(10, 7, C.dark); p(10, 6, C.dark);
+
+  // legs – two alternating frames
+  if (frame === 0) {
+    // front-left forward, front-right back, rear same
+    p(2, 11, C.body); p(2, 12, C.dark);
+    p(4, 11, C.dark); p(4, 12, C.body);
+    p(6, 11, C.body); p(6, 12, C.dark);
+    p(8, 11, C.dark); p(8, 12, C.body);
+  } else {
+    p(2, 11, C.dark); p(2, 12, C.body);
+    p(4, 11, C.body); p(4, 12, C.dark);
+    p(6, 11, C.dark); p(6, 12, C.body);
+    p(8, 11, C.body); p(8, 12, C.dark);
   }
 }
 
 function drawTrack() {
   tctx.clearRect(0, 0, TW, TH);
+
   const progress = 1 - timeLeft / totalTime;
-  const catX = Math.round(WALK_X_MIN + Math.min(1, Math.max(0, progress)) * (WALK_X_MAX - WALK_X_MIN));
+  const catX = Math.round(WALK_X_MIN + progress * (WALK_X_MAX - WALK_X_MIN));
+
+  // ── Ground tiles
   for (let x = 0; x < TW; x++) {
-    const passed = x < catX + CAT_W/2;
-    const even = Math.floor(x / 4) % 2 === 0;
+    const passed = x < catX + CAT_W / 2;
+    const even   = Math.floor(x / 4) % 2 === 0;
+    // top stripe
     px(tctx, x, GROUND_Y,     passed ? (even ? C.gold : C.gold2) : (even ? C.gnd1 : C.gnd2));
-    for (let dy=1; dy<=4; dy++) px(tctx, x, GROUND_Y+dy, passed ? '#b07c30' : C.gnd3);
+    // body
+    for (let dy = 1; dy <= 4; dy++)
+      px(tctx, x, GROUND_Y + dy, passed ? '#b07c30' : C.gnd3);
   }
-  for (let gx=6; gx<TW-4; gx+=10) {
-    const passed = gx < catX+2;
-    px(tctx, gx, GROUND_Y-1, passed ? C.grass : '#2a3818');
-    px(tctx, gx+1, GROUND_Y-2, passed ? C.grass2 : '#223014');
-    px(tctx, gx+2, GROUND_Y-1, passed ? C.grass : '#2a3818');
+
+  // ── Grass tufts
+  for (let gx = 6; gx < TW - 4; gx += 10) {
+    const passed = gx < catX + 2;
+    px(tctx, gx,     GROUND_Y - 1, passed ? C.grass  : '#2a3818');
+    px(tctx, gx + 1, GROUND_Y - 2, passed ? C.grass2 : '#223014');
+    px(tctx, gx + 2, GROUND_Y - 1, passed ? C.grass  : '#2a3818');
   }
+
+  // ── Cat sprite
   drawWalkSprite(catX, CAT_TOP_Y, walkFrame, false);
+
+  // ── Finish flag
   const fx = WALK_X_MAX + CAT_W + 2;
-  for(let y=GROUND_Y-9; y<=GROUND_Y; y++) px(tctx, fx, y, C.flag);
-  px(tctx, fx+1, GROUND_Y-9, C.gold); px(tctx, fx+1, GROUND_Y-8, C.gold); px(tctx, fx+1, GROUND_Y-7, C.gold);
-  px(tctx, fx+2, GROUND_Y-9, C.gold2); px(tctx, fx+2, GROUND_Y-8, C.gold2); px(tctx, fx+2, GROUND_Y-7, C.gold2);
-  if (timeLeft === 0) { tctx.fillStyle = 'rgba(245,201,122,0.18)'; tctx.fillRect(0, 0, TW, TH); }
+  for (let y = GROUND_Y - 9; y <= GROUND_Y; y++) px(tctx, fx, y, C.flag);
+  px(tctx, fx + 1, GROUND_Y - 9, C.gold);
+  px(tctx, fx + 1, GROUND_Y - 8, C.gold);
+  px(tctx, fx + 1, GROUND_Y - 7, C.gold);
+  px(tctx, fx + 2, GROUND_Y - 9, C.gold2);
+  px(tctx, fx + 2, GROUND_Y - 8, C.gold2);
+  px(tctx, fx + 2, GROUND_Y - 7, C.gold2);
+
+  // ── "Done!" little stamp when finished
+  if (timeLeft === 0) {
+    tctx.fillStyle = 'rgba(245,201,122,0.18)';
+    tctx.fillRect(0, 0, TW, TH);
+  }
 }
 
+// ── Animate track
 let rafId;
 function animateTrack(ts) {
-  if (running && ts - walkFrameTime > WALK_PERIOD) { walkFrame = 1 - walkFrame; walkFrameTime = ts; }
+  if (running && ts - walkFrameTime > WALK_PERIOD) {
+    walkFrame     = 1 - walkFrame;
+    walkFrameTime = ts;
+  }
   drawTrack();
   rafId = requestAnimationFrame(animateTrack);
 }
 requestAnimationFrame(animateTrack);
 
 // ════════════════════════════════════════
-//  MOCHI (unchanged charm)
+//  MOCHI PET CANVAS  (16 × 16 → 80 × 80 CSS px)
 // ════════════════════════════════════════
 const mochi = document.getElementById('mochiCanvas');
 const mctx  = mochi.getContext('2d');
 mctx.imageSmoothingEnabled = false;
-let mochiState = 'idle', mochiTimer = null, petCount=0;
+
+let mochiState  = 'idle';
+let mochiTimer  = null;
+let petCount    = 0;
 const MOOD_MSGS = ['purring...', 'so happy!', '(˘ᵕ˘)', '*kneads*', 'mrrrow ♥'];
 
 function drawMochi(state) {
-  mctx.clearRect(0,0,16,16);
-  const p=(x,y,c)=>px(mctx,x,y,c);
-  p(2,1,C.dark); p(3,2,C.body); p(12,1,C.dark); p(11,2,C.body);
-  for(let x=2;x<=12;x++) for(let y=2;y<=8;y++) p(x,y,C.body);
-  p(3,6,C.pink); p(4,6,C.pink); p(10,6,C.pink); p(11,6,C.pink);
-  if(state==='blink'){ p(4,5,C.dark);p(5,5,C.dark);p(9,5,C.dark);p(10,5,C.dark);}
-  else if(state==='happy'){ p(4,5,C.dark);p(5,4,C.dark);p(6,4,C.dark);p(9,5,C.dark);p(10,4,C.dark);p(11,4,C.dark);}
-  else if(state==='zz'){ p(4,5,C.dark);p(5,5,C.dark);p(9,5,C.dark);p(10,5,C.dark); p(4,4,C.body);p(5,4,C.body);p(9,4,C.body);p(10,4,C.body);}
-  else{ p(4,4,C.eye);p(5,4,C.eye);p(9,4,C.eye);p(10,4,C.eye);p(5,3,C.light);p(10,3,C.light);}
+  mctx.clearRect(0, 0, 16, 16);
+  const p = (x, y, c) => px(mctx, x, y, c);
+
+  // ears
+  p(2,1,C.dark); p(3,2,C.body);
+  p(12,1,C.dark); p(11,2,C.body);
+
+  // head (3–11, 2–8)
+  for (let x = 2; x <= 12; x++)
+    for (let y = 2; y <= 8; y++) p(x, y, C.body);
+  p(2,2,''); p(12,2,''); p(2,8,''); p(12,8,'');
+
+  // cheek blush
+  p(3, 6, C.pink); p(4, 6, C.pink);
+  p(10,6, C.pink); p(11,6, C.pink);
+
+  // eyes
+  if (state === 'blink') {
+    p(4,5,C.dark); p(5,5,C.dark);
+    p(9,5,C.dark); p(10,5,C.dark);
+  } else if (state === 'happy') {
+    p(4,5,C.dark); p(5,4,C.dark); p(6,4,C.dark);
+    p(9,5,C.dark); p(10,4,C.dark); p(11,4,C.dark);
+  } else if (state === 'zz') {
+    // sleepy half-lidded
+    p(4,5,C.dark); p(5,5,C.dark);
+    p(9,5,C.dark); p(10,5,C.dark);
+    p(4,4,C.body); p(5,4,C.body);   // lids
+    p(9,4,C.body); p(10,4,C.body);
+  } else {
+    p(4,4,C.eye); p(5,4,C.eye);
+    p(9,4,C.eye); p(10,4,C.eye);
+    p(5,3,C.light); p(10,3,C.light); // shine
+  }
+
+  // nose
   p(7,6,C.pink); p(8,6,C.pink);
-  if(state==='happy'){ p(6,7,C.dark);p(9,7,C.dark);p(7,7,C.pink);p(8,7,C.pink);}
-  else{ p(6,7,C.dark);p(9,7,C.dark);}
-  for(let x=3;x<=12;x++) for(let y=9;y<=14;y++) p(x,y,C.body);
-  for(let x=5;x<=10;x++) for(let y=10;y<=13;y++) p(x,y,C.light);
-  p(3,14,C.body); p(4,15,C.dark); p(11,14,C.body); p(12,15,C.dark);
-  if(state==='happy'){ mctx.fillStyle='#f06070'; p(0,2,'#f06070');p(1,1,'#f06070');p(2,2,'#f06070');p(1,3,'#f06070'); p(14,2,'#f06070');p(15,1,'#f06070');p(14,1,'#f06070');p(15,3,'#f06070');}
-  if(state==='zz'){ p(13,2,'#8c6a42');p(14,1,'#8c6a42');p(15,0,'#8c6a42');}
+  // mouth
+  if (state === 'happy') {
+    p(6,7,C.dark); p(9,7,C.dark);
+    p(7,7,C.pink); p(8,7,C.pink);
+  } else {
+    p(6,7,C.dark); p(9,7,C.dark);
+  }
+
+  // body (3–11, 9–14)
+  for (let x = 3; x <= 12; x++)
+    for (let y = 9; y <= 14; y++) p(x, y, C.body);
+  p(3,9,''); p(12,9,''); p(3,14,''); p(12,14,'');
+
+  // belly
+  for (let x = 5; x <= 10; x++)
+    for (let y = 10; y <= 13; y++) p(x, y, C.light);
+
+  // paws
+  p(3,14,C.body); p(4,15,C.dark);
+  p(11,14,C.body); p(12,15,C.dark);
+
+  // happy hearts
+  if (state === 'happy') {
+    mctx.fillStyle = '#f06070';
+    // left heart
+    p(0,2,'#f06070'); p(1,1,'#f06070'); p(2,2,'#f06070'); p(1,3,'#f06070');
+    // right heart
+    p(14,2,'#f06070'); p(15,1,'#f06070'); p(14,1,'#f06070'); p(15,3,'#f06070');
+  }
+
+  // zz bubbles
+  if (state === 'zz') {
+    p(13,2,C.muted||'#8c6a42'); p(14,1,C.muted||'#8c6a42'); p(15,0,C.muted||'#8c6a42');
+  }
 }
-function scheduleBlink(){ clearTimeout(mochiTimer); mochiTimer=setTimeout(()=>{ if(mochiState==='idle'){ mochiState='blink'; drawMochi('blink'); setTimeout(()=>{ mochiState='idle'; drawMochi('idle'); scheduleBlink();},150);}else scheduleBlink();},1600+Math.random()*2800);}
-drawMochi('idle'); scheduleBlink();
-mochi.addEventListener('click',()=>{ clearTimeout(mochiTimer); petCount++; mochiState='happy'; drawMochi('happy'); playMew(); document.getElementById('catMood').textContent=MOOD_MSGS[(petCount-1)%MOOD_MSGS.length]; setTimeout(()=>{ mochiState='idle'; drawMochi('idle'); setTimeout(()=>document.getElementById('catMood').textContent='click to pet!',600); scheduleBlink();},1200);});
-function mochiReact(state){ clearTimeout(mochiTimer); mochiState=state; drawMochi(state); if(state!=='idle'){ setTimeout(()=>{ mochiState='idle'; drawMochi('idle'); scheduleBlink();},1500);}}
+
+function scheduleBlink() {
+  clearTimeout(mochiTimer);
+  mochiTimer = setTimeout(() => {
+    if (mochiState === 'idle') {
+      mochiState = 'blink';
+      drawMochi('blink');
+      setTimeout(() => {
+        mochiState = 'idle';
+        drawMochi('idle');
+        scheduleBlink();
+      }, 150);
+    } else {
+      scheduleBlink();
+    }
+  }, 1600 + Math.random() * 2800);
+}
+
+drawMochi('idle');
+scheduleBlink();
+
+mochi.addEventListener('click', () => {
+  clearTimeout(mochiTimer);
+  petCount++;
+  mochiState = 'happy';
+  drawMochi('happy');
+  playMew();
+  const mood = MOOD_MSGS[(petCount - 1) % MOOD_MSGS.length];
+  document.getElementById('catMood').textContent = mood;
+  setTimeout(() => {
+    mochiState = 'idle';
+    drawMochi('idle');
+    setTimeout(() => {
+      document.getElementById('catMood').textContent = 'click to pet!';
+    }, 600);
+    scheduleBlink();
+  }, 1200);
+});
+
+// Mochi reacts when session starts
+function mochiReact(state) {
+  clearTimeout(mochiTimer);
+  mochiState = state;
+  drawMochi(state);
+  if (state !== 'idle') {
+    setTimeout(() => {
+      mochiState = 'idle';
+      drawMochi('idle');
+      scheduleBlink();
+    }, 1500);
+  }
+}
 
 // ════════════════════════════════════════
-//  AUDIO (same nostalgic sounds)
+//  WEB AUDIO
 // ════════════════════════════════════════
 let audioCtx;
-function getAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
-function playChime(){ try{ const ctx=getAudio(); [523.25,659.25,783.99,1046.5].forEach((freq,i)=>{ const osc=ctx.createOscillator(),gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type='sine'; osc.frequency.value=freq; const t=ctx.currentTime+i*0.18; gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(0.15,t+0.05); gain.gain.exponentialRampToValueAtTime(0.001,t+0.7); osc.start(t); osc.stop(t+0.7);});}catch(e){}}
-function playMew(){ try{ const ctx=getAudio(), osc=ctx.createOscillator(), gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type='sine'; osc.frequency.setValueAtTime(700,ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1100,ctx.currentTime+0.08); osc.frequency.exponentialRampToValueAtTime(850,ctx.currentTime+0.28); gain.gain.setValueAtTime(0.07,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.32); osc.start(); osc.stop(ctx.currentTime+0.35); }catch(e){}}
-function playTick(){ try{ const ctx=getAudio(),osc=ctx.createOscillator(),gain=ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.type='square'; osc.frequency.value=1200; gain.gain.setValueAtTime(0.03,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.06); osc.start(); osc.stop(ctx.currentTime+0.07); }catch(e){}}
-
-// ════════════════════════════════════════
-//  TIMER + LOGIC — UNLIMITED SESSIONS
-// ════════════════════════════════════════
-function fmt(secs){ const m=String(Math.floor(secs/60)).padStart(2,'0'), s=String(secs%60).padStart(2,'0'); return `${m}:${s}`; }
-function updateDisplay(){ document.getElementById('timeDisplay').textContent = fmt(timeLeft); document.getElementById('sessionInfo').textContent = `SESSION ${sessionNum} · ${mode.toUpperCase()}`; }
-function flashScreen(){ const f=document.getElementById('flash'); f.classList.add('show'); setTimeout(()=>f.classList.remove('show'),400); }
-
-// renders log with pagination (unlimited history)
-function renderLog() {
-  const container = document.getElementById('logEntries');
-  const totalSessions = sessions.length;
-  const maxPage = totalSessions === 0 ? 0 : Math.ceil(totalSessions / LOG_PAGE_SIZE) - 1;
-  if(logPage > maxPage && totalSessions>0) logPage = maxPage;
-  if(logPage < 0) logPage = 0;
-  
-  if(totalSessions === 0) {
-    container.innerHTML = '<div class="log-empty">no sessions yet ☕</div>';
-    return;
-  }
-  const startIdx = Math.max(0, totalSessions - (logPage+1)*LOG_PAGE_SIZE);
-  const endIdx = startIdx + LOG_PAGE_SIZE;
-  const pageEntries = sessions.slice(startIdx, endIdx).reverse();  // show newest first per page
-  container.innerHTML = pageEntries.map(s => {
-    const taskShort = s.task.length > 18 ? s.task.slice(0,17)+'…' : s.task;
-    return `<div class="log-entry"><span class="ts">${s.ts}</span><span class="tk"> · ${taskShort}</span></div>`;
-  }).join('');
-  
-  // enable/disable nav buttons
-  const prevBtn = document.getElementById('prevLogBtn');
-  const nextBtn = document.getElementById('nextLogBtn');
-  if(prevBtn) prevBtn.disabled = (logPage === 0);
-  if(nextBtn) nextBtn.disabled = (logPage >= maxPage);
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
 }
 
-// UNLIMITED TOMATO DISPLAY — shows ALL completed sessions as 🍅 (no limit)
-function renderTomatoes() {
-  const totalCompleted = sessions.length;   // each focus completion = 1 tomato
-  const container = document.getElementById('tomatoRow');
-  if(totalCompleted === 0) {
-    container.innerHTML = '<span class="tomato tomato-dim" style="font-size:8px;">0 🍅</span>';
-    return;
-  }
-  // Display all tomatoes in rows — wrap gracefully, compact but infinite
-  let html = '';
-  for(let i=0; i<totalCompleted; i++) {
-    html += `<span class="tomato">🍅</span>`;
-  }
-  container.innerHTML = html;
-  // add small scroll hint if many
-  if(totalCompleted > 12) container.style.maxHeight = '40px';
-  else container.style.maxHeight = 'auto';
+function playChime() {
+  try {
+    const ctx = getAudio();
+    // Rising arpeggio: C5 E5 G5 C6
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const t = ctx.currentTime + i * 0.18;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.15, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+      osc.start(t);
+      osc.stop(t + 0.7);
+    });
+  } catch(e) {}
+}
+
+function playMew() {
+  try {
+    const ctx = getAudio();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(700, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.08);
+    osc.frequency.exponentialRampToValueAtTime(850,  ctx.currentTime + 0.28);
+    gain.gain.setValueAtTime(0.07, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.32);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.35);
+  } catch(e) {}
+}
+
+function playTick() {
+  try {
+    const ctx  = getAudio();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'square';
+    osc.frequency.value = 1200;
+    gain.gain.setValueAtTime(0.03, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+    osc.start(); osc.stop(ctx.currentTime + 0.07);
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════
+//  TIMER LOGIC
+// ════════════════════════════════════════
+function fmt(secs) {
+  const m = String(Math.floor(secs / 60)).padStart(2, '0');
+  const s = String(secs % 60).padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function updateDisplay() {
+  document.getElementById('timeDisplay').textContent = fmt(timeLeft);
+  document.getElementById('sessionInfo').textContent =
+    `SESSION ${sessionNum} · ${mode.toUpperCase()}`;
+}
+
+function flashScreen() {
+  const f = document.getElementById('flash');
+  f.classList.add('show');
+  setTimeout(() => f.classList.remove('show'), 400);
 }
 
 function onSessionComplete() {
@@ -619,27 +805,30 @@ function onSessionComplete() {
   timeLeft = 0;
   updateDisplay();
   drawTrack();
+
   flashScreen();
   playChime();
   mochiReact('happy');
-  
+
   if (mode === 'focus') {
     const task = document.getElementById('taskInput').value.trim() || 'focus session';
     const now  = new Date();
     const ts   = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    sessions.push({ ts, task, fullDate: now });
+    sessions.push({ ts, task });
     sessionNum++;
-    // after adding session, reset to first page (most recent)
-    logPage = 0;
     renderLog();
-    renderTomatoes();
   }
+
   document.getElementById('startBtn').textContent = '▶  START';
+
+  // Auto-reset after 2.5 s
   setTimeout(resetTimer, 2500);
 }
 
 function startStop() {
+  // Unlock AudioContext on first interaction
   try { getAudio().resume(); } catch(e) {}
+
   if (running) {
     running = false;
     clearInterval(ticker);
@@ -673,25 +862,67 @@ function resetTimer() {
   document.getElementById('startBtn').textContent = '▶  START';
 }
 
-// Mode & settings (unchanged)
+// ── Mode tabs
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     mode = tab.dataset.mode;
     resetTimer();
   });
 });
-document.getElementById('settingsBtn').addEventListener('click', ()=>document.getElementById('settingsPanel').classList.toggle('open'));
-document.getElementById('saveBtn').addEventListener('click',()=>{
-  let f=parseInt(document.getElementById('setFocus').value)||25, s=parseInt(document.getElementById('setShort').value)||5, l=parseInt(document.getElementById('setLong').value)||15;
-  DURATIONS.focus=Math.min(90,Math.max(1,f))*60; DURATIONS.short=Math.min(30,Math.max(1,s))*60; DURATIONS.long=Math.min(60,Math.max(1,l))*60;
-  document.getElementById('setFocus').value=DURATIONS.focus/60; document.getElementById('setShort').value=DURATIONS.short/60; document.getElementById('setLong').value=DURATIONS.long/60;
-  resetTimer(); document.getElementById('settingsPanel').classList.remove('open');
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  document.getElementById('settingsPanel').classList.toggle('open');
 });
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const f = parseInt(document.getElementById('setFocus').value) || 25;
+  const s = parseInt(document.getElementById('setShort').value) || 5;
+  const l = parseInt(document.getElementById('setLong').value)  || 15;
+  DURATIONS.focus = Math.min(90, Math.max(1, f)) * 60;
+  DURATIONS.short = Math.min(30, Math.max(1, s)) * 60;
+  DURATIONS.long  = Math.min(60, Math.max(1, l)) * 60;
+  document.getElementById('setFocus').value = DURATIONS.focus / 60;
+  document.getElementById('setShort').value = DURATIONS.short / 60;
+  document.getElementById('setLong').value  = DURATIONS.long  / 60;
+  resetTimer();
+  document.getElementById('settingsPanel').classList.remove('open');
+});
+
 document.getElementById('startBtn').addEventListener('click', startStop);
 document.getElementById('resetBtn').addEventListener('click', resetTimer);
 
-// Pagination controls
-document.getElementById('prevLogBtn').addEventListener('click', () => {
-  if(logPage > 0
+// ════════════════════════════════════════
+//  SESSION LOG
+// ════════════════════════════════════════
+function renderLog() {
+  const el = document.getElementById('logEntries');
+  if (sessions.length === 0) {
+    el.innerHTML = '<div class="log-empty">no sessions yet ☕</div>';
+  } else {
+    el.innerHTML = sessions.slice(-5).reverse().map(s => {
+      const taskShort = s.task.length > 18 ? s.task.slice(0, 17) + '…' : s.task;
+      return `<div class="log-entry">
+        <span class="ts">${s.ts}</span>
+        <span class="tk"> · ${taskShort}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Tomato counter (max 8 shown)
+  const total   = 8;
+  const done    = Math.min(sessions.length, total);
+  document.getElementById('tomatoRow').innerHTML =
+    Array.from({ length: total }, (_, i) =>
+      `<span class="tomato${i >= done ? ' dim' : ''}">🍅</span>`
+    ).join('');
+}
+
+// ── Init
+updateDisplay();
+renderLog();
+drawTrack();
+</script>
+</body>
+</html>
