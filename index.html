@@ -902,7 +902,7 @@ function renderLog() {
   if (sessions.length === 0) {
     el.innerHTML = '<div class="log-empty">no sessions yet ☕</div>';
   } else {
-    el.innerHTML = sessions.slice(-5).reverse().map(s => {
+    el.innerHTML = sessions.slice().reverse().map(s => {
       const taskShort = s.task.length > 18
         ? s.task.slice(0, 17) + '…'
         : s.task;
